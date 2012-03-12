@@ -66,8 +66,8 @@ native32 :
 
 exe :
 	$(WOCAMLBUILD) -libs $(WIN_LIBS) -ocamlc i586-mingw32msvc-ocamlc -ocamlopt i586-mingw32msvc-ocamlopt  main.native
-	mkdir -p build/Win-i386
-	cp _build/src/main.native build/Win-i386/jark.exe
+	mkdir -p build/Win32
+	cp _build/src/main.native build/Win32/jark.exe
 	rm -rf _build
 
 clean::
@@ -99,7 +99,7 @@ zip:
 	mkdir -p upload
 	cd upload && mkdir jark-$(VERSION)-win32
 	cp README.md upload/jark-$(VERSION)-win32/README
-	cp build/$(ARCH)/jark.exe upload/jark-$(VERSION)-win32/jark.exe
+	cp build/Win32/jark.exe upload/jark-$(VERSION)-win32/jark.exe
 	cd upload && zip -r jark-$(VERSION)-win32.zip jark-$(VERSION)-win32/*
 
 deb:
