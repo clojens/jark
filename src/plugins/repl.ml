@@ -7,7 +7,6 @@ module Repl =
     open Jark
     open Gstr
     open Gsys
-    open ANSITerminal
     open Config
     module C = Config
 
@@ -54,8 +53,8 @@ module Repl =
       else
         Pervasives.print_string str
 
-    let print_line styles str =
-      print_string styles (str ^ "\n");
+    let print_line str =
+      print_string (str ^ "\n");
       flush stdout
 
     let show_config () =
@@ -68,9 +67,9 @@ module Repl =
       ]
       in
       let print_field (x,y) =
-        print_string [white] x;
-        print_string [default] ": ";
-        print_line   [green] y
+        print_string x;
+        print_string ": ";
+        print_line   y
       in
       List.iter print_field fields;
       flush stdout
@@ -138,15 +137,15 @@ module Repl =
     (* update config fields from string options *)
     let set_color o =
       config.color <- default_bool o config.color;
-      print_line [default] ("color: " ^ (string_of_bool config.color))
+      print_line ("color: " ^ (string_of_bool config.color))
 
     let set_completion o =
       config.completion <- default_bool o config.completion;
-      print_line [default] ("completion: " ^ (string_of_bool config.completion))
+      print_line ("completion: " ^ (string_of_bool config.completion))
 
     let set_multiline o =
       config.multiline <- default_bool o config.multiline;
-      print_line [default] ("multiline: " ^ (string_of_bool config.multiline))
+      print_line ("multiline: " ^ (string_of_bool config.multiline))
 
     let set_completion_mode o =
       begin
@@ -155,7 +154,7 @@ module Repl =
         | "histfile" -> Histfile
         | _          -> config.completion_mode
       end;
-      print_line [default] (
+      print_line (
         "completion-mode: " ^
         (string_of_completion_mode config.completion_mode))
 

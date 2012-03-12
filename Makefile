@@ -25,7 +25,7 @@ ANSITERM = $(DEPLIBS)/ANSITerminal-0.6/_build
 CAMLP5 = $(DEPLIBS)/ocaml/camlp5
 
 
-WIN_LIBS = $(WLIB)/unix,$(WLIB)/bigarray,$(WLIB)/str,$(WLIB)/nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(ANSITERM)/ANSITerminal,$(LEDIT)/ledit
+WIN_LIBS = $(WLIB)/unix,$(WLIB)/bigarray,$(WLIB)/str,$(WLIB)/nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib
 
 LIBS = unix,bigarray,str,nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(ANSITERM)/ANSITerminal,$(LEDIT)/ledit
 
@@ -33,7 +33,7 @@ OCAMLBUILD = ocamlbuild -j 2 -quiet  -I $(GUTILS) -I $(NREPL) -I src -I src/plug
            -lflags -I,$(CAMLP5)  -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags  -I,$(LEDIT) -lflags  -I,$(LEDIT)
 
 WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUTILS) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
-           -lflags -I,$(CAMLP5) -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags -I,$(LEDIT) -lflags  -I,$(LEDIT)
+           -lflags -I,$(CAMLP5) 
 
 all:: native
 
@@ -65,7 +65,6 @@ native32 :
 	rm -rf _build
 
 exe :
-	cd $(LEDIT)  && make -f Makefile.win32 && make -f Makefile.win32 ledit.cmxa 
 	$(WOCAMLBUILD) -libs $(WIN_LIBS) -ocamlc i586-mingw32msvc-ocamlc -ocamlopt i586-mingw32msvc-ocamlopt  main.native
 	mkdir -p build/Win-i386
 	cp _build/src/main.native build/Win-i386/jark.exe
@@ -124,7 +123,7 @@ camlp5:
 		rm -rf $(DEPLIBS)/camlp5-6.02.3 ;\
 	fi
 
-deps-win32: ansiterminal camlp5-win32
+deps-win32: camlp5-win32
 
 camlp5-win32:
 	if [ ! -e $(CAMLP5)/camlp5.cmxa ]; then \

@@ -120,8 +120,8 @@ module Config =
         try
           if not (skip_line s) then begin
             match Str.bounded_split (Str.regexp "=") s 2 with
-            | [k; v] -> set_opt (Gstr.strip (String.lowercase k)) (Gstr.strip v)
-            | _ -> raise (Failure "Bad config file line")
+              | [k; v] -> set_opt (Gstr.strip (String.lowercase k)) (Gstr.strip v)
+              | _ -> raise (Failure "Bad config file line")
           end
         with _ -> begin
           print_endline ("Bad config file: " ^ config_file);
