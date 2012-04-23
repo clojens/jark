@@ -1,0 +1,13 @@
+
+0.4.1
+-----
+
+* Allow classpath to be specified in jark.conf
+
+0.4.0
+-----
+
+* Integrate the nREPL protocol 
+* Separated client and server code
+* Added plugins for remote JVM Management
+* Add REPL commands
