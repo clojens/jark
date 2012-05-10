@@ -13,7 +13,11 @@ module Config =
     open Gfile
     open Gconf
 
-    let release_version = "0.5.0"
+    let release_version = "0.4.2"
+
+    let clojure_version = "1.3.0"
+
+    let server_version  = "0.4.2"
 
     let jark_version = "jark client version " ^ release_version
 
@@ -49,9 +53,6 @@ module Config =
     let platform = if Gsys.is_windows then windows else posix
 
     let cljr_lib install_root () = Gfile.path [ install_root ; "lib" ]
-
-    let clojure_version = "1.3.0"
-    let server_version  = "0.4.0"
 
     (* path to server jar *)
         
@@ -107,8 +108,8 @@ module Config =
 
     let classpath () = 
       let opts = get_server_opts () in
-      check_valid_clojure_version opts.clojure_version ();
-      (Gstr.uq opts.classpath)
+      let main_cp = (server_jar platform.cljr opts.server_version opts.clojure_version ()) in
+      main_cp
 
     let read_config_file set_opt config_file () =
       let skip_line s =
