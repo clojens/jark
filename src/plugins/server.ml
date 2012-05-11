@@ -37,8 +37,9 @@ module Server =
       Gfile.path [ C.platform.cljr ; "lib" ]
 
     let server_jar_url ver ()  =
+      let o = C.get_server_opts () in
       let jar =
-        sprintf "jark-0.4.0-clojure-%s-standalone.jar" ver
+        sprintf "jark-%s-clojure-%s-standalone.jar" o.server_version  ver
       in
       let git_base = "https://github.com/downloads/icylisper/jark-server" in
       let url xs = String.concat "/" xs in
