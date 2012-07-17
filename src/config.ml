@@ -13,7 +13,7 @@ module Config =
     open Gfile
     open Gconf
 
-    let release_version = "0.4.0"
+    let release_version = "0.5.0"
 
     let jark_version = "jark client version " ^ release_version
 
@@ -51,7 +51,7 @@ module Config =
     let cljr_lib install_root () = Gfile.path [ install_root ; "lib" ]
 
     let clojure_version = "1.3.0"
-    let server_version  = "0.4.0"
+    let server_version  = "0.4.2"
 
     (* path to server jar *)
         

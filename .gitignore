@@ -13,3 +13,4 @@ src/lib/ledit/ledit.a
 src/lib/ledit/ledit.cma
 src/lib/ledit/ledit.cmxa
 src/lib/ledit/ledit.out
+deps

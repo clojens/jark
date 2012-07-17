@@ -11,14 +11,28 @@ module Server =
     open Config
     module C = Config
     open Options
-    open Plugin
     open Gfile
 
-    let registry = Plugin.create ()
-    let register_fn = Plugin.register_fn registry
-    let alias_fn = Plugin.alias_fn registry
+    let usage cmd  =
+      match cmd with
+        | "start"   ->  [" [-p|--port=<9000>] [-j|--jvm-opts=<opts>] [--log=<path>]" ;
+                         "   Start a local Jark server. Takes optional JVM options as a \" delimited string"]
+        | "stop"    ->  [" [-n|--name=<vm-name>]";
+                         "   Shuts down the current instance of the JVM (Run only on the server)"];
+        | "install" ->  [" [--install_root=<path> (default:~/.cljr)] [--clojure_version=<1.3.0|1.2.1> (default:1.3.1)] [--force=<true|false> (default:false)]";
+                          "   Install server components"];
+        | "info"    ->  [" Display Jark server information"]
+        | _         ->  ["Unknown command"]
 
-    let show_usage args = Plugin.show_usage registry "server"
+    let cmd_usage cmd () = 
+      Gstr.pe (Gstr.unlines (usage cmd))
+
+    let all_usage () =
+      let f cmd = 
+        Gstr.pe cmd;
+        Gstr.pe (Gstr.unlines (usage cmd)) in
+      List.map f ["install"; "start"; "stop"; "info"];
+      ()
 
     let load path =
       let apath = (Gfile.abspath path) in
@@ -29,10 +43,6 @@ module Server =
         ()
       end
 
-    let ns_load args = match args with
-        [] -> (); Plugin.show_cmd_usage registry "load"
-      | x :: xs -> load x
-        
     let cljr_lib () =
       Gfile.path [ C.platform.cljr ; "lib" ]
 
@@ -69,7 +79,7 @@ module Server =
 
     (* commands *)
 
-    let install args =
+    let install () =
       (* check if jar already exists *)
       let o = C.get_server_opts () in
       C.check_valid_clojure_version o.clojure_version ();
@@ -116,7 +126,7 @@ module Server =
       let outp = outp log_file () in
       String.concat " " ["java"; (Gstr.uq jvm_opts) ; "-cp"; cp_boot (); "clojure.tools.jark.server"; port; " "; outp; " &"]
 
-    let start args =
+    let start () =
       let opts = C.get_server_opts () in
       let jvm_opts = opts.jvm_opts in
       let env = C.get_env () in
@@ -132,7 +142,7 @@ module Server =
       let pid = Gstr.strip (Jark.eval ~out:true ~value:false msg ()) in
       Gstr.maybe_int (Jark.value_of pid)
 
-    let stop args =
+    let stop () =
       (* FIXME: Ensure that stop is issued only on the server *)
       match get_pid () with
         | None -> print_endline "Could not get pid of JVM"
@@ -142,33 +152,11 @@ module Server =
             Unix.kill pid Sys.sigkill;
           end
 
-    let _ =
-      register_fn "start" start [
-        "[-p|--port=<9000>] [-j|--jvm-opts=<opts>] [--log=<path>]" ;
-        "Start a local Jark server. Takes optional JVM options as a \" delimited string"];
-
-      register_fn "stop" stop [
-        "[-n|--name=<vm-name>]";
-        "Shuts down the current instance of the JVM (Run only on the server)"];
-
-      register_fn "load" ns_load [
-      "[--env=<string>] file" ;
-        "Loads the given clj file, and adds relative classpath"];
-
-      register_fn "install" install [
-      "[--install_root=<path> (default:~/.cljr)] [--clojure_version=<1.3.0|1.2.1> (default:1.3.1)] [--force=<true|false> (default:false)]";
-      "Install server components"];
-      
-      register_fn "info" info ["Display Jark server information"]
-
-    let dispatch cmd args =
-      match cmd with
-        | "info"       -> info args
-        | "install"    -> install args
-        | "load"       -> ns_load args
-        | "start"      -> start args
-        | "stop"       -> stop args
-        | "version"    -> version args
-        | _            -> Jark.nfa "clojure.tools.jark.server" ~f:cmd ~a:args ()
+    let dispatch args () =
+      match args with
+        | "start"   :: []   -> start ()
+        | "stop"    :: []   -> stop ()
+        | "install" :: []   -> install ()
+        | cmd       :: args -> Jark.nfa "clojure.tools.jark.server" ~f:cmd ~a:args ()
 
 end

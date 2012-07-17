@@ -58,25 +58,6 @@ let eval_stdin () =
    try while true do Buffer.add_string buf (input_line stdin) done
    with End_of_file -> Gstr.pe (Jark.eval (Buffer.contents buf) ());;
 
-(* plugin system *)
-module type PLUGIN =
-  sig
-    val show_usage : unit -> unit
-    val dispatch   : string -> string list -> unit
-  end
-
-let registry : (string, (module PLUGIN)) Hashtbl.t = Hashtbl.create 16
-
-let register x = Hashtbl.add registry x
-
-let _ = register "server"     (module Server: PLUGIN)
-
-let plugin_dispatch m args =
-  let module Handler = (val (Hashtbl.find registry m) : PLUGIN) in
-  match args with
-      [] | "usage" :: _ | "help" :: _ -> Handler.show_usage ()
-    | x :: xs -> Handler.dispatch x xs
-
 let run_eval args =
   Gstr.pe (Jark.eval args ())
 
@@ -109,12 +90,15 @@ let run_lein xs () =
 (* handle actions that don't dispatch to a plugin *)
 let main_handler m args =
   match m :: args with
-    | "repl"      :: [ns]     -> run_repl ns ()
-    | "repl"      :: []       -> run_repl "user" ()
-    | "plugin"    :: ["list"] -> show_plugins ()
-    | "lein"      :: xs       -> run_lein xs ()
-    | "version"   :: []       -> show_version ()
-    | xs                      -> server_dispatch xs
+    | "repl"      :: [ns]            -> run_repl ns ()
+    | "repl"      :: []              -> run_repl "user" ()
+    | "server"    :: []              -> Server.all_usage ()
+    | "server"    :: [cmd; "--help"] -> Server.cmd_usage cmd ()
+    | "server"    :: xs              -> Server.dispatch xs ()
+    | "plugin"    :: ["list"]        -> show_plugins ()
+    | "lein"      :: xs              -> run_lein xs ()
+    | "version"   :: []              -> show_version ()
+    | xs                             -> server_dispatch xs
 
 (* option parsing *)
 
@@ -208,12 +192,7 @@ let _ =
     else match opts.args with
         [] -> show_usage ()
       | m :: args ->
-        if Hashtbl.mem registry m then
-          plugin_dispatch m args
-        else if Gfile.exists m then    
-          Jark.pfa "plugin.ns" ~f:"load" ~a:[m] ()        
-        else
-          main_handler m args
+        main_handler m args
   with
     | Unix.Unix_error(_, "connect", "") ->
     Gstr.pe (connection_usage ())
