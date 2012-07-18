@@ -1,0 +1,6 @@
+
+* init script ~/.cljr/init.clj
+* Wait for server to start
+* jark.conf per directory (support global and local)
+* default jark.conf
+* fix -o opts in jark -e eg . jark -o json -e

@@ -1,0 +1,8 @@
+
+Vagrant::Config.run do |config|
+
+  config.vm.box = "oneiric64"
+
+  config.vm.network :hostonly,"33.33.33.20"
+
+end

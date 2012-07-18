@@ -1,5 +1,5 @@
 
-VERSION = 0.4.0
+VERSION = 0.5.0
 
 ARCH = $(shell uname)-$(shell uname -m)
 
@@ -14,34 +14,32 @@ WGET = wget --no-check-certificate -O -
 
 # download and make dependencies within the project directory
 TOP = $(shell pwd)
-DEP = $(TOP)/deps
-LEDIT = $(TOP)/src/lib/ledit
-GUTILS = src/lib/gutils
-NREPL = src/lib/nrepl
+LEDIT = lib/ledit
+GUT  = lib/gut
+NREPL = lib/ocaml-nrepl-client
 
-# External Deps
-DEPLIBS = $(DEP)/lib
-ANSITERM = $(DEPLIBS)/ANSITerminal-0.6/_build
-CAMLP5 = $(DEPLIBS)/ocaml/camlp5
-
+LIB = $(TOP)/lib
+ANSITERM = lib/ANSITerminal-0.6/_build
+# CAMLP5 = lib/camlp5/lib/ocaml/camlp5/
+CAMLP5 = /usr/lib/ocaml/camlp5
+CAMLP5DEP = $(TOP)/lib/camlp5
 
 WIN_LIBS = $(WLIB)/unix,$(WLIB)/bigarray,$(WLIB)/str,$(WLIB)/nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(ANSITERM)/ANSITerminal,$(LEDIT)/ledit
 
-LIBS = unix,bigarray,str,nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(ANSITERM)/ANSITerminal,$(LEDIT)/ledit
+LIBS = unix,bigarray,str,nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(TOP)/$(ANSITERM)/ANSITerminal,$(TOP)/$(LEDIT)/ledit
 
-OCAMLBUILD = ocamlbuild -j 2 -quiet  -I $(GUTILS) -I $(NREPL) -I src -lflags -I,/usr/lib/ocaml/pcre  \
-           -lflags -I,$(CAMLP5)  -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags  -I,$(LEDIT) -lflags  -I,$(LEDIT)
+OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUT)/src -I $(NREPL)/src -lflags -I,/usr/lib/ocaml/pcre  \
+           -lflags -I,$(CAMLP5)  -lflags -I,$(TOP)/$(ANSITERM) -cflags -I,$(TOP)/$(ANSITERM) -cflags  -I,$(TOP)/$(LEDIT) -lflags  -I,$(TOP)/$(LEDIT) 
 
-WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUTILS) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
+WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUT) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
            -lflags -I,$(CAMLP5) -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags -I,$(LEDIT) -lflags  -I,$(LEDIT)
 
 all:: native
 
 native :
-	cd $(LEDIT)  && make && make ledit.cmxa 
 	$(OCAMLBUILD) -libs $(LIBS) main.native
-	if [ ! -d build/$(ARCH) ]; then mkdir -p build/$(ARCH); fi
-	cp _build/src/main.native build/$(ARCH)/$(BIN_NAME)
+	mkdir -p dist/bin
+	cp _build/src/main.native dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH)
 	rm -rf _build
 
 upx :
@@ -78,10 +76,6 @@ clean::
 	rm -f gmon.out
 	rm -f jark*.tar.{gz,bz2}
 	rm -rf jark
-	rm -f ~/src/lib/nrepl/*.cm[iox]
-	rm -f ~/src/lib/gutils/*.cm[iox]
-	ocamlbuild -clean
-	cd $(LEDIT)  && make clean
 
 install : native
 	mkdir -p $(PREFIX)/bin
@@ -104,34 +98,56 @@ zip:
 	cd upload && zip -r jark-$(VERSION)-win32.zip jark-$(VERSION)-win32/*
 
 deb:
-	fakeroot debian/rules clean
-	fakeroot debian/rules binary
+	fakeroot dist/debian/rules clean
+	fakeroot dist/debian/rules binary
 
-deps: ansiterminal camlp5
+deps: ansiterminal gut ledit nrepl
 
 ansiterminal:
 	if [ ! -e $(ANSITERM)/ANSITerminal.cmxa ]; then \
-		mkdir -p $(DEPLIBS) ;\
-		cd $(DEPLIBS) && $(WGET) https://forge.ocamlcore.org/frs/download.php/610/ANSITerminal-0.6.tar.gz 2> /dev/null | tar xzvf - ;\
-		cd $(DEPLIBS)/ANSITerminal-0.6 && ocaml setup.ml -configure && ocaml setup.ml -build ;\
+		mkdir -p $(LIB) ;\
+		cd $(LIB) && $(WGET) https://forge.ocamlcore.org/frs/download.php/610/ANSITerminal-0.6.tar.gz 2> /dev/null | tar xzvf - ;\
+		cd $(LIB)/ANSITerminal-0.6 && ocaml setup.ml -configure && ocaml setup.ml -build ;\
 	fi
 
 camlp5:
-	if [ ! -e $(CAMLP5)/camlp5.cmxa ]; then \
-		mkdir -p $(DEPLIBS) ; \
-		cd $(DEPLIBS) && $(WGET) http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.02.3.tgz 2> /dev/null | tar xzvf - ; \
-		cd camlp5-6.02.3 && ./configure --prefix $(DEP) && make world.opt && make install ;\
-		rm -rf $(DEPLIBS)/camlp5-6.02.3 ;\
+	if [ ! -e $(TOP)/$(CAMLP5)/camlp5.cmxa ]; then \
+		mkdir -p $(LIB) ; \
+		cd $(LIB) && $(WGET) http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.02.3.tgz 2> /dev/null | tar xzvf - ; \
+		cd camlp5-6.02.3 && ./configure --prefix $(CAMLP5DEP) && make world.opt && make install ;\
+		rm -rf $(LIB)/camlp5-6.02.3 ;\
+	fi
+
+gut:
+	if [ ! -d $(GUT) ]; then \
+		cd $(LIB) && git clone git://github.com/icylisper/gut.git ; \
+	else \
+		cd $(GUT) && git pull origin master ;\
+	fi
+
+ledit:
+	if [ ! -d $(LEDIT) ]; then \
+		cd $(LIB) && git clone git://github.com/icylisper/ledit.git  ; \
+	        cd $(TOP)/$(LEDIT) && make && make ledit.cmxa ; \
+	else \
+		cd $(LEDIT) && git pull origin master && make && make ledit.cmxa ;\
+	fi
+
+nrepl:
+	if [ ! -d $(NREPL) ]; then \
+		cd $(LIB) && git clone git://github.com/icylisper/ocaml-nrepl-client.git ; \
+	else \
+		cd $(NREPL) && git pull origin master ;\
 	fi
 
 deps-win32: ansiterminal camlp5-win32
 
 camlp5-win32:
 	if [ ! -e $(CAMLP5)/camlp5.cmxa ]; then \
-		mkdir -p $(DEPLIBS) ; \
-		cd $(DEPLIBS) && $(WGET) http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.02.3.tgz 2> /dev/null | tar xzvf - ; \
-		cd camlp5-6.02.3 && ./configure --prefix $(DEP) --no-opt && make world.opt && make install ;\
-		rm -rf $(DEPLIBS)/camlp5-6.02.3 ;\
+		mkdir -p $(LIB) ; \
+		cd $(LIB) && $(WGET) http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.02.3.tgz 2> /dev/null | tar xzvf - ; \
+		cd camlp5-6.02.3 && ./configure --prefix $(CAMLP5DEP) --no-opt && make world.opt && make install ;\
+		rm -rf $(LIB)/camlp5-6.02.3 ;\
 	fi
 
 LINUX_64_HOST=vagrant@33.33.33.20
