@@ -15,7 +15,7 @@ WGET = wget --no-check-certificate -O -
 # download and make dependencies within the project directory
 TOP = $(shell pwd)
 LEDIT = lib/ledit
-GUT  = lib/gut
+GUTS  = lib/guts
 NREPL = lib/ocaml-nrepl-client
 
 LIB = $(TOP)/lib
@@ -28,10 +28,10 @@ WIN_LIBS = $(WLIB)/unix,$(WLIB)/bigarray,$(WLIB)/str,$(WLIB)/nums,$(CAMLP5)/caml
 
 LIBS = unix,bigarray,str,nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(TOP)/$(ANSITERM)/ANSITerminal,$(TOP)/$(LEDIT)/ledit
 
-OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUT)/src -I $(NREPL)/src -lflags -I,/usr/lib/ocaml/pcre  \
+OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUTS)/src -I $(NREPL)/src -lflags -I,/usr/lib/ocaml/pcre  \
            -lflags -I,$(CAMLP5)  -lflags -I,$(TOP)/$(ANSITERM) -cflags -I,$(TOP)/$(ANSITERM) -cflags  -I,$(TOP)/$(LEDIT) -lflags  -I,$(TOP)/$(LEDIT) 
 
-WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUT) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
+WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUTS) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
            -lflags -I,$(CAMLP5) -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags -I,$(LEDIT) -lflags  -I,$(LEDIT)
 
 all:: native
@@ -101,7 +101,7 @@ deb:
 	fakeroot dist/debian/rules clean
 	fakeroot dist/debian/rules binary
 
-deps: ansiterminal gut ledit nrepl
+deps: ansiterminal guts ledit nrepl
 
 ansiterminal:
 	if [ ! -e $(ANSITERM)/ANSITerminal.cmxa ]; then \
@@ -118,11 +118,11 @@ camlp5:
 		rm -rf $(LIB)/camlp5-6.02.3 ;\
 	fi
 
-gut:
-	if [ ! -d $(GUT) ]; then \
-		cd $(LIB) && git clone git://github.com/icylisper/gut.git ; \
+guts:
+	if [ ! -d $(GUTS) ]; then \
+		cd $(LIB) && git clone git://github.com/icylisper/guts.git ; \
 	else \
-		cd $(GUT) && git pull origin master ;\
+		cd $(GUTS) && git pull origin master ;\
 	fi
 
 ledit:
