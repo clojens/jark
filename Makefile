@@ -16,10 +16,10 @@ WGET = wget --no-check-certificate -O -
 TOP = $(shell pwd)
 LEDIT = lib/ledit
 GUTS  = lib/guts
-NREPL = lib/ocaml-nrepl-client
+NREPL = lib/nrepl
 
 LIB = $(TOP)/lib
-ANSITERM = lib/ANSITerminal-0.6/_build
+ANSITERM = lib/ansiterminal/_build
 # CAMLP5 = lib/camlp5/lib/ocaml/camlp5/
 CAMLP5 = /usr/lib/ocaml/camlp5
 CAMLP5DEP = $(TOP)/lib/camlp5
@@ -28,7 +28,7 @@ WIN_LIBS = $(WLIB)/unix,$(WLIB)/bigarray,$(WLIB)/str,$(WLIB)/nums,$(CAMLP5)/caml
 
 LIBS = unix,bigarray,str,nums,$(CAMLP5)/camlp5,$(CAMLP5)/gramlib,$(TOP)/$(ANSITERM)/ANSITerminal,$(TOP)/$(LEDIT)/ledit
 
-OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUTS)/src -I $(NREPL)/src -lflags -I,/usr/lib/ocaml/pcre  \
+OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUTS) -I $(NREPL) -lflags -I,/usr/lib/ocaml/pcre  \
            -lflags -I,$(CAMLP5)  -lflags -I,$(TOP)/$(ANSITERM) -cflags -I,$(TOP)/$(ANSITERM) -cflags  -I,$(TOP)/$(LEDIT) -lflags  -I,$(TOP)/$(LEDIT) 
 
 WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUTS) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
@@ -76,6 +76,10 @@ clean::
 	rm -f gmon.out
 	rm -f jark*.tar.{gz,bz2}
 	rm -rf jark
+	cd $(LEDIT)  && make clean && rm -rf *.cm[iox] *~
+	cd $(NREPL)  && rm -rf *.cm[iox] *~
+	cd $(GUTS)  && rm -rf *.cm[iox] *~
+	cd lib/ansiterminal && make clean && rm -rf *.cm[iox] *~
 
 install : native
 	mkdir -p $(PREFIX)/bin
@@ -101,14 +105,13 @@ deb:
 	fakeroot dist/debian/rules clean
 	fakeroot dist/debian/rules binary
 
-deps: ansiterminal guts ledit nrepl
+deps: ansiterminal ledit
 
 ansiterminal:
-	if [ ! -e $(ANSITERM)/ANSITerminal.cmxa ]; then \
-		mkdir -p $(LIB) ;\
-		cd $(LIB) && $(WGET) https://forge.ocamlcore.org/frs/download.php/610/ANSITerminal-0.6.tar.gz 2> /dev/null | tar xzvf - ;\
-		cd $(LIB)/ANSITerminal-0.6 && ocaml setup.ml -configure && ocaml setup.ml -build ;\
-	fi
+		if [ ! -e $(ANSITERM)/ANSITerminal.cmxa ]; then \
+			mkdir -p $(LIB) ;\
+			cd $(LIB)/ansiterminal && ocaml setup.ml -configure && ocaml setup.ml -build ;\
+		fi	
 
 camlp5:
 	if [ ! -e $(TOP)/$(CAMLP5)/camlp5.cmxa ]; then \
@@ -118,27 +121,8 @@ camlp5:
 		rm -rf $(LIB)/camlp5-6.02.3 ;\
 	fi
 
-guts:
-	if [ ! -d $(GUTS) ]; then \
-		cd $(LIB) && git clone git://github.com/icylisper/guts.git ; \
-	else \
-		cd $(GUTS) && git pull origin master ;\
-	fi
-
 ledit:
-	if [ ! -d $(LEDIT) ]; then \
-		cd $(LIB) && git clone git://github.com/icylisper/ledit.git  ; \
-	        cd $(TOP)/$(LEDIT) && make && make ledit.cmxa ; \
-	else \
-		cd $(LEDIT) && git pull origin master && make && make ledit.cmxa ;\
-	fi
-
-nrepl:
-	if [ ! -d $(NREPL) ]; then \
-		cd $(LIB) && git clone git://github.com/icylisper/ocaml-nrepl-client.git ; \
-	else \
-		cd $(NREPL) && git pull origin master ;\
-	fi
+	cd $(TOP)/$(LEDIT) && make && make ledit.cmxa 
 
 deps-win32: ansiterminal camlp5-win32
 

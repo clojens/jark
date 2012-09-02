@@ -1,6 +1,10 @@
 *.cmi
 *.cmx
 *.cmo
+*.cma
+*.cmxa
+*.1
+*.a
 *.o
 ._d/
 nrepl-client
@@ -12,3 +16,7 @@ deps
 .vagrant
 dist/bin
 dist/tar
+*.ppo
+*.native
+*.log
+*.out
