@@ -1,5 +1,5 @@
 
-VERSION = 0.4.2
+VERSION = 0.4.3
 
 ARCH = $(shell uname)-$(shell uname -m)
 
