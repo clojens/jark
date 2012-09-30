@@ -1,6 +1,10 @@
 *.cmi
 *.cmx
 *.cmo
+*.cma
+*.cmxa
+*.1
+*.a
 *.o
 ._d/
 nrepl-client
@@ -8,8 +12,11 @@ main.native
 build
 _build
 upload
-src/lib/ledit/ledit.1
-src/lib/ledit/ledit.a
-src/lib/ledit/ledit.cma
-src/lib/ledit/ledit.cmxa
-src/lib/ledit/ledit.out
+deps
+.vagrant
+dist/bin
+dist/tar
+*.ppo
+*.native
+*.log
+*.out
