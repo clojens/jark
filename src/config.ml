@@ -55,12 +55,6 @@ module Config =
 
     let cljr_lib install_root () = Gfile.path [ install_root ; "lib" ]
 
-<<<<<<< HEAD
-=======
-    let clojure_version = "1.3.0"
-    let server_version  = "0.4.2"
-
->>>>>>> 0.5.0
     (* path to server jar *)
         
     let server_jar install_root server_version clojure_version () =
