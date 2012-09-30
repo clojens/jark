@@ -57,7 +57,7 @@ install : native
 
 upx :
 	mv $(JARK_BIN) $(JARK_BIN)-un
-	upx --brute --best -f -o $(JARK_BIN) 
+	upx --brute --best -f -o $(JARK_BIN) $(JARK_BIN)-un
 	rm -f $(JARK_BIN)-un
 	rm -rf _build
 
