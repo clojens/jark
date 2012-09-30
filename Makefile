@@ -5,14 +5,12 @@ ARCH = $(shell uname)-$(shell uname -m)
 
 PREFIX=debian/jark/usr
 
-BIN_NAME = jark
+JARK_BIN = dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH).bin
 
 OLIB = /usr/lib/ocaml
 WLIB = /usr/i586-mingw32msvc/lib/ocaml/
 WGET = wget --no-check-certificate -O -
 
-
-# download and make dependencies within the project directory
 TOP = $(shell pwd)
 LEDIT = lib/ledit
 GUTS  = lib/guts
@@ -20,7 +18,6 @@ NREPL = lib/nrepl
 
 LIB = $(TOP)/lib
 ANSITERM = lib/ansiterminal/_build
-# CAMLP5 = lib/camlp5/lib/ocaml/camlp5/
 CAMLP5 = /usr/lib/ocaml/camlp5
 CAMLP5DEP = $(TOP)/lib/camlp5
 
@@ -34,39 +31,12 @@ OCAMLBUILD = ocamlbuild -j 2 -quiet  -I src -I $(GUTS) -I $(NREPL) -lflags -I,/u
 WOCAMLBUILD = ocamlbuild -j 2 -quiet -I $(GUTS) -I $(NREPL) -I src -I src/plugins  -lflags -I,/usr/lib/ocaml/pcre \
            -lflags -I,$(CAMLP5) -lflags -I,$(ANSITERM) -cflags -I,$(ANSITERM) -cflags -I,$(LEDIT) -lflags  -I,$(LEDIT)
 
-all:: native
+all:: deps native
 
 native :
 	$(OCAMLBUILD) -libs $(LIBS) main.native
 	mkdir -p dist/bin
-	cp _build/src/main.native dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH).bin
-	rm -rf _build
-
-upx :
-	cd $(LEDIT)  && make && make ledit.cmxa 
-	$(OCAMLBUILD) -libs $(LIBS) main.native
-	if [ ! -d build/$(ARCH) ]; then mkdir -p build/$(ARCH); fi
-	cp _build/src/main.native build/$(ARCH)/$(BIN_NAME)-un
-	rm -f build/$(ARCH)/$(BIN_NAME)
-	upx --brute --best -f -o build/$(ARCH)/$(BIN_NAME) build/$(ARCH)/$(BIN_NAME)-un
-	rm -f build/$(BIN_NAME)-un
-	rm -rf _build
-
-byte : 
-	$(OCAMLBUILD) -libs $(LIBS) main.byte
-	cp _build/src/main.byte jark.byte
-
-
-native32 :
-	$(OCAMLBUILD) -libs $(LIBS) -ocamlopt "ocamlopt.32" main.native
-	cp _build/src/main.native jark.native
-	rm -rf _build
-
-exe :
-	cd $(LEDIT)  && make -f Makefile.win32 && make -f Makefile.win32 ledit.cmxa 
-	$(WOCAMLBUILD) -libs $(WIN_LIBS) -ocamlc i586-mingw32msvc-ocamlc -ocamlopt i586-mingw32msvc-ocamlopt  main.native
-	mkdir -p build/Win32
-	cp _build/src/main.native build/Win32/jark.exe
+	cp _build/src/main.native $(JARK_BIN)
 	rm -rf _build
 
 clean::
@@ -83,15 +53,30 @@ clean::
 
 install : native
 	mkdir -p $(PREFIX)/bin
-	install -m 0755 build/$(ARCH)/$(BIN_NAME) $(PREFIX)/bin/
+	install -m 0755 $(JARK_BIN) $(PREFIX)/bin/jark
 
-tar:
-	rm -rf upload/jark-$(VERSION)-$(ARCH)
-	mkdir -p upload
-	cd upload && mkdir jark-$(VERSION)-$(ARCH)
-	cp README.md upload/jark-$(VERSION)-$(ARCH)/README
-	cp build/$(ARCH)/jark upload/jark-$(VERSION)-$(ARCH)/jark
-	cd upload && tar zcf jark-$(VERSION)-$(ARCH).tar.gz jark-$(VERSION)-$(ARCH)/*
+upx :
+	cp _build/src/main.native $(JARK_BIN)-un
+	rm -f $(JARK_BIN)
+	upx --brute --best -f -o $(JARK_BIN) $(JARK_BIN)-un
+	rm -f build/$(BIN_NAME)-un
+	rm -rf _build
+
+byte : 
+	$(OCAMLBUILD) -libs $(LIBS) main.byte
+	cp _build/src/main.byte jark.byte
+
+native32 :
+	$(OCAMLBUILD) -libs $(LIBS) -ocamlopt "ocamlopt.32" main.native
+	cp _build/src/main.native jark.native
+	rm -rf _build
+
+exe :
+	cd $(LEDIT)  && make -f Makefile.win32 && make -f Makefile.win32 ledit.cmxa 
+	$(WOCAMLBUILD) -libs $(WIN_LIBS) -ocamlc i586-mingw32msvc-ocamlc -ocamlopt i586-mingw32msvc-ocamlopt  main.native
+	mkdir -p build/Win32
+	cp _build/src/main.native build/Win32/jark.exe
+	rm -rf _build
 
 zip:
 	rm -rf upload/jark-$(VERSION)-win32
@@ -102,8 +87,10 @@ zip:
 	cd upload && zip -r jark-$(VERSION)-win32.zip jark-$(VERSION)-win32/*
 
 deb:
-	fakeroot dist/debian/rules clean
-	fakeroot dist/debian/rules binary
+	ln -sf dist/debian debian
+	fakeroot debian/rules clean
+	fakeroot debian/rules binary
+	rm debian
 
 deps: ansiterminal ledit
 
@@ -112,14 +99,6 @@ ansiterminal:
 			mkdir -p $(LIB) ;\
 			cd $(LIB)/ansiterminal && ocaml setup.ml -configure && ocaml setup.ml -build ;\
 		fi	
-
-camlp5:
-	if [ ! -e $(TOP)/$(CAMLP5)/camlp5.cmxa ]; then \
-		mkdir -p $(LIB) ; \
-		cd $(LIB) && $(WGET) http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.02.3.tgz 2> /dev/null | tar xzvf - ; \
-		cd camlp5-6.02.3 && ./configure --prefix $(CAMLP5DEP) && make world.opt && make install ;\
-		rm -rf $(LIB)/camlp5-6.02.3 ;\
-	fi
 
 ledit:
 	cd $(TOP)/$(LEDIT) && make && make ledit.cmxa 
@@ -139,7 +118,7 @@ LINUX_32_HOST=vagrant@33.33.33.21
 WIN_32_HOST=vagrant@33.33.33.22
 
 linux64: 
-	ssh ${LINUX_64_HOST} "cd ~/jark-client && git pull && make upx && make tar && make deb"
+	ssh ${LINUX_64_HOST} "cd ~/jark-client && git pull && make && make upx"
 	scp ${LINUX_64_HOST}:~/jark-client/upload/jark-${VERSION}-Linux-x86_64.tar.gz upload/
 	scp ${LINUX_64_HOST}:~/*.deb upload/
 
