@@ -5,7 +5,7 @@ ARCH = $(shell uname)-$(shell uname -m)
 
 PREFIX=debian/jark/usr
 
-JARK_BIN = dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH).bin
+JARK_BIN = dist/bin/jark-$(VERSION)-$(ARCH).bin
 
 OLIB = /usr/lib/ocaml
 WLIB = /usr/i586-mingw32msvc/lib/ocaml/
@@ -56,10 +56,9 @@ install : native
 	install -m 0755 $(JARK_BIN) $(PREFIX)/bin/jark
 
 upx :
-	cp _build/src/main.native $(JARK_BIN)-un
-	rm -f $(JARK_BIN)
-	upx --brute --best -f -o $(JARK_BIN) $(JARK_BIN)-un
-	rm -f build/$(BIN_NAME)-un
+	mv $(JARK_BIN) $(JARK_BIN)-un
+	upx --brute --best -f -o $(JARK_BIN) 
+	rm -f $(JARK_BIN)-un
 	rm -rf _build
 
 byte : 
@@ -119,8 +118,9 @@ WIN_32_HOST=vagrant@33.33.33.22
 
 linux64: 
 	ssh ${LINUX_64_HOST} "cd ~/jark-client && git pull && make && make upx"
-	scp ${LINUX_64_HOST}:~/jark-client/upload/jark-${VERSION}-Linux-x86_64.tar.gz upload/
-	scp ${LINUX_64_HOST}:~/*.deb upload/
+	scp ${LINUX_64_HOST}:~/jark-client/dist/bin/jark-$(VERSION)-Linux-x86_64.bin dist/bin/
+	ssh ${LINUX_64_HOST} "make deb"
+	scp ${LINUX_64_HOST}:~/*.deb dist/debian/
 
 linux32:
 	ssh ${LINUX_32_HOST} "cd ~/jark-client && git pull && make && make tar"
