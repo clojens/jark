@@ -73,7 +73,7 @@ let server_dispatch args =
 let show_version () = Gstr.pe Config.jark_version
 
 let show_plugins () =
-  Jark.nfa "clojure.tools.jark.plugin" ~f:"list" ()
+  Jark.nfa "jark.plugin" ~f:"list" ()
 
 let run_repl ns () = 
   if Gsys.is_windows then
@@ -85,7 +85,7 @@ let run_repl ns () =
 (* alias for jark lein run args *)
 
 let run_lein xs () =
-  Jark.nfa "clojure.tools.jark.plugin.lein" ~f:"run-task" ~a:xs ()
+  Jark.nfa "jark.plugin.lein" ~f:"run-task" ~a:xs ()
 
 (* handle actions that don't dispatch to a plugin *)
 let main_handler m args =

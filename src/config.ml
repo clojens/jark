@@ -13,7 +13,7 @@ module Config =
     open Gfile
     open Gconf
 
-    let release_version = "0.5.0"
+    let release_version = "0.4.3"
 
     let jark_version = "jark client version " ^ release_version
 

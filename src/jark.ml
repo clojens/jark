@@ -48,9 +48,9 @@ module Jark =
     let dispatch_fn () = 
       let opts = C.get_server_opts () in
       match opts.output_format with 
-          "plain" -> "(clojure.tools.jark.server/dispatch "
-        | "json"  -> "(clojure.tools.jark.server/dispatch-json "
-        |  _      -> "(clojure.tools.jark.server/dispatch "
+          "plain" -> "(jark.server/dispatch "
+        | "json"  -> "(jark.server/dispatch-json "
+        |  _      -> "(jark.server/dispatch "
 
     let nfa n ?(f="nil") ?(a=[]) ?(fmt=ResText) () =
       let d = dispatch_fn () in
@@ -65,7 +65,7 @@ module Jark =
       nrepl_send env fmt { mid = node_id env; code = dm }
 
     let pfa p ?(f="nil") ?(a=[]) () =
-      nfa ("clojure.tools.jark." ^ p) ~f:f ~a:a ()
+      nfa ("jark." ^ p) ~f:f ~a:a ()
 
     let dispatch args =
       match args with

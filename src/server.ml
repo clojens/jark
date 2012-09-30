@@ -37,7 +37,7 @@ module Server =
     let load path =
       let apath = (Gfile.abspath path) in
       if (Gfile.exists apath) then
-        Jark.nfa "clojure.tools.jark.plugin.ns" ~f:"load" ~a:[apath] ()
+        Jark.nfa "jark.plugin.ns" ~f:"load" ~a:[apath] ()
       else begin
         Printf.printf "File not found %s\n" apath;
         ()
@@ -124,7 +124,7 @@ module Server =
 
     let start_cmd jvm_opts port log_file =
       let outp = outp log_file () in
-      String.concat " " ["java"; (Gstr.uq jvm_opts) ; "-cp"; cp_boot (); "clojure.tools.jark.server"; port; " "; outp; " &"]
+      String.concat " " ["java"; (Gstr.uq jvm_opts) ; "-cp"; cp_boot (); "jark.server"; port; " "; outp; " &"]
 
     let start () =
       let opts = C.get_server_opts () in
@@ -138,7 +138,7 @@ module Server =
       printf "Started JVM on port %s\n" port
     
     let get_pid () =
-      let msg = "(clojure.tools.jark.server/pid)" in
+      let msg = "(jark.server/pid)" in
       let pid = Gstr.strip (Jark.eval ~out:true ~value:false msg ()) in
       Gstr.maybe_int (Jark.value_of pid)
 
@@ -157,6 +157,6 @@ module Server =
         | "start"   :: []   -> start ()
         | "stop"    :: []   -> stop ()
         | "install" :: []   -> install ()
-        | cmd       :: args -> Jark.nfa "clojure.tools.jark.server" ~f:cmd ~a:args ()
+        | cmd       :: args -> Jark.nfa "jark.server" ~f:cmd ~a:args ()
 
 end
