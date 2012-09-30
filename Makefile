@@ -39,7 +39,7 @@ all:: native
 native :
 	$(OCAMLBUILD) -libs $(LIBS) main.native
 	mkdir -p dist/bin
-	cp _build/src/main.native dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH)
+	cp _build/src/main.native dist/bin/$(BIN_NAME)-$(VERSION)-$(ARCH).bin
 	rm -rf _build
 
 upx :

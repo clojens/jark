@@ -1,8 +1,11 @@
+0.4.3
+----
+* Refactor namespaces and better management of dependencies
+* 
 
 0.4.2
 -----
 * Handle pretty-printing for unspecified types like Ratio, Sorted-map etc
-
 
 0.4.1
 -----
