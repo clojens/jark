@@ -18,7 +18,7 @@ module Config =
 
     let server_version  = "0.4.3"
 
-    let release_version = "0.4.3"
+    let release_version = "0.4.4"
 
     let jark_version = "jark client version " ^ release_version
 
@@ -99,7 +99,7 @@ module Config =
         | "port"            -> env.port <- (int_of_string v)
         | _                 -> ()
 
-    let valid_clojure_versions = ["1.3.0"; "1.2.1"]
+    let valid_clojure_versions = ["1.3.0"; "1.2.1"; "1.4.0"; "1.5.0-alpha5"]
 
     let check_valid_clojure_version ver () =
       if (List.exists (fun x -> x = ver) valid_clojure_versions) then

@@ -112,9 +112,11 @@ module Repl =
                                  "/config";
                                  "/cp [list add]";
                                  "/debug [true false]";
-                                 "/ns namespace";
-                                 "/server [version info]";
-                                 "/vm [info stat]";
+                                 "/methods OBJECT";
+                                 "/ns NAMESPACE";
+                                 "/require NAMESPACE";
+                                 "/server stat";
+                                 "/vm stat";
                                  "/quit"] in
       print_string [green] lines;
       Printf.printf "\n";
@@ -175,12 +177,13 @@ module Repl =
         | ["/cp"; "add"; path]    -> Jark.pfa "plugin.cp" ~f:"add" ~a:[path] (); env
         | ["/clear"]              -> ignore (Sys.command "clear"); env
         | ["/server"; "version"]  -> Jark.pfa "server" ~f:"version" (); env
-        | ["/server"; "info"]     -> Jark.pfa "server" ~f:"info" (); env
+        | ["/server"; "stat"]     -> Jark.pfa "server" ~f:"stat" (); env
         | ["/vm"; "version"]      -> Jark.pfa "plugin.vm" ~f:"version" (); env
         | ["/vm"; "stat"]         -> Jark.pfa "plugin.vm" ~f:"stat" (); env
         | ["/ns"; o]              -> set_ns env o
         | ["/config"]             -> show_config (); env
         | ["/quit"]               -> env
+        | ["/methods"; o]         -> Jark.pfa "plugin.ns" ~f:"methods" ~a:[o] (); env
         | _                       -> env
           
     let handle env str () =
