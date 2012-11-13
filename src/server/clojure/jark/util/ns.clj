@@ -1,0 +1,112 @@
+(ns jark.util.ns
+  (:gen-class)
+  (:import (java.io File FileNotFoundException))
+  (:require clojure.set)
+  (:use clojure.pprint)
+  (:use clojure.tools.namespace))
+
+; inlining from clojure.contrib.ns-utils
+(defn ns-vars
+  "Returns a sorted seq of symbols naming public vars in a namespace"
+  [ns]
+  (sort (map first (ns-publics ns))))
+
+(defn namespaces []
+  (find-namespaces-on-classpath))
+
+(defn searched-namespaces []
+  (let [nss (namespaces)]
+    (if (> (count nss) 0)
+      nss
+      (map ns-name (all-ns)))))
+
+(defn starting-with [module]
+  (sort (filter #(. (str %) startsWith module) (searched-namespaces))))
+
+(defn containing-str [module]
+  (sort (filter #(. (str %) contains module) (searched-namespaces))))
+
+(defn require-ns [n]
+  (require (symbol n)))
+
+(defn fun? [f]
+  (instance? clojure.lang.IFn f))
+
+(defn fns [n]
+  (require-ns n)
+  (let [namespace (symbol n)
+        vars      (vec (ns-vars namespace))
+        fns-list  (filter #(fun? %) vars)
+        filtered-fns (filter (complement #(.startsWith % "-main")) (map #(.toString %) fns-list))]
+    (sort filtered-fns)))
+
+(defn fn-args [n f]
+  (nthnext
+   (flatten (:arglists (meta (eval (read-string (format "#'%s/%s" n f)))))) 0))
+
+(defn fn-doc [n f]
+  (:doc (meta (eval (read-string (format "#'%s/%s" n f))))))
+
+(defn fn-usage [n f]
+  (str "USAGE: " f " " (fn-args n f)))
+
+(defn help
+  ([n]
+   (println n)
+   (require-ns n)
+   (into {} (map #(vector % (fn-doc n %)) (fns n))))
+
+  ([n f]
+   (println n "." f)
+   (fn-usage n f)))
+
+(defn about
+  [n]
+  (require-ns n)
+  (println (let [p (into [] (fns n))]
+                (cl-format true "~{~A ~}" p))))
+
+(defn apply-fn [n f & args]
+  (apply (resolve (symbol (str n "/" f))) args))
+
+(defn load-module [module]
+  (try
+    (do (require-ns module)
+      true)
+    (catch FileNotFoundException e
+      (do
+        (println "jark: No such module" module)
+        nil))))
+
+(defn plugins []
+  (let [ns-strings       (map #(.toString %) (namespaces))
+        jark-namespaces  (filter #(.startsWith % "jark.plugin.") ns-strings)
+        names            (sort (map #((clojure.string/split % #"\.") 2) jark-namespaces))
+        ns-exceptions    ["plugin"]]
+    (seq (clojure.set/difference (set names) (set ns-exceptions)))))
+
+(defn in? [seq e]
+  (some #(= e %) seq))
+
+(defn get-dispatch-ns [module]
+  (if (in? (into (plugins) ["plugin"]) module)
+    (str "jark.plugin." module)
+    module))
+
+(defn- resolve-cmd [module command]
+  (resolve (symbol (str module "/" command))))
+
+(defn dispatch-module-cmd
+  ([printer module]
+     (let [ns (get-dispatch-ns module)]
+       (when (load-module ns)
+         (printer (help ns)))))
+
+  ([printer module command & args]
+     (let [ns (get-dispatch-ns module)]
+       (when (load-module ns)
+         (if-let [cmd (resolve-cmd ns command)]
+           (if-let [ret (apply cmd args)]
+             (printer ret))
+           (println ns ": No such command" command))))))
+

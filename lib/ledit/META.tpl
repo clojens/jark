@@ -1,6 +1,0 @@
-name="ledit"
-version="LEDIT_VERSION"
-description="Line editing for interactive commands"
-requires="unix,camlp5.gramlib"
-archive(byte)="ledit.cma"
-archive(native)="ledit.cmxa"
