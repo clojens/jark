@@ -8,8 +8,7 @@
   (:import (java.lang.management RuntimeMXBean ManagementFactory)))
 
 (defn list []
-  (let [urls (seq (.getURLs (ClassLoader/getSystemClassLoader)))]
-    (map (memfn toString) urls)))
+  (map (memfn getPath) (.getURLs (ClassLoader/getSystemClassLoader))))
 
 (defn exists?
   ([path]
@@ -45,6 +44,6 @@
 (defn jar? [path]
   (and (file? path) (clojure.java.classpath/jar-file? (File. path))))
 
-(defn list-jars [dir]
-  (when (dir? dir)
-    (filter #(jar-file? (File. %)) (map #(.toString %) (.listFiles (File. dir))))))
+(defn list-jars [path]
+  (when (dir? path)
+    (filter #(jar-file? (File. %)) (map (memfn getAbsolutePath) (file-seq (File. path))))))
