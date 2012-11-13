@@ -23,7 +23,7 @@ h2. Downloads
       </td>
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.3-Linux-x86_64.bin">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.3-Linux-x86_64.bin">
        <span class="big-height"><span class="hide-me"></span>
        0.4.3<br>
       (256 KB)</span></a>
@@ -43,7 +43,7 @@ h2. Downloads
     </td>
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.3-Darwin-x86_64.bin">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.3-Darwin-x86_64.bin">
        <span class="big-height"><span class="hide-me"></span>
        0.4.3<br>
       (310 KB)</span></a>
@@ -111,7 +111,7 @@ h2. Downloads
      <th>Windows</th>
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.0-win32.zip">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.0-win32.zip">
        <span class="big-height"><span class="hide-me"></span>
        0.4.0<br>
       (236 KB)</span></a>
@@ -119,7 +119,7 @@ h2. Downloads
 
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.0-win32.zip">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.0-win32.zip">
        <span class="big-height"><span class="hide-me"></span>
        0.4.0<br>
       (236 KB)</span></a>
@@ -133,7 +133,7 @@ h2. Downloads
      </table>
 
      <br>
-     <a href="https://github.com/icylisper/jark-client/downloads">Older releases</a>
+     <a href="https://github.com/icylisper/jark/downloads">Older releases</a>
      
 </div>
 
