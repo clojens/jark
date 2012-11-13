@@ -1,0 +1,33 @@
+<!-- <img src="http://www.gravatar.com/avatar/70e424d2699d86901d295684d38b84b6?s=80"> -->
+
+<div class="tag" align="left">
+<b>About</b>
+<br>
+ I am Isaac Praveen (icylisper), a LISP hacker and free-software
+ enthusiast from Bangalore, India. <br>
+ During my free time, I try to get a deeper understanding of how software systems and algorithms
+ work. 
+</div>
+
+<br>
+
+<div class="tag">
+  <a href="/tags/clojure.html">clojure</a> ({{ site.categories.clojure | size }}) 
+  <br>
+  <a href="/tags/common-lisp.html">common-lisp</a> ({{ site.categories.common-lisp | size }})
+  <br>
+  <a href="/tags/emacs.html">emacs</a> ({{ site.categories.emacs |   size }})
+  <br>
+  <a href="/tags/gadgets.html">gadgets</a> ({{ site.categories.gadgets | size }})
+  <br>
+  <a href="/tags/virtualization.html">virtualization</a> ({{ site.categories.virtualization | size }})
+
+</div>
+<br>
+<a href="http://feeds2.feedburner.com/icylisper" class="center"><img border="0" src="images/feed-icon-28x28.png"   title="icylisper's Feed"/></a>
+<br>
+<a href="http://in.linkedin.com/in/isaacpraveen">
+ <img src="http://www.linkedin.com/img/webpromo/btn_liprofile_blue_80x15.png" width="80" height="15" border="0" alt="View Isaac Praveen's profile on LinkedIn">
+    </a>
+<br>
+<a href="http://twitter.com/icylisper" target="_new"><img src="http://twitter-badges.s3.amazonaws.com/follow_me-c.png" class="aligncenter" width="100" height="20" border="0"/></a>

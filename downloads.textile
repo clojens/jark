@@ -1,0 +1,193 @@
+---
+layout: clojure
+head: Jark
+---
+
+h2. Downloads
+
+
+<div class="left-floater">
+  <table class="port-table">
+   <tr class="processor-header">
+     <th></th>
+     <th>X86</th>
+     <th>AMD64</th>
+     <th>SPARC</th>
+   </tr>
+
+   <tr class="system-header">
+    <th>GNU/Linux</th>
+
+      <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+      </td>
+
+    <td class="available">
+    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.3-Linux-x86_64.bin">
+       <span class="big-height"><span class="hide-me"></span>
+       0.4.3<br>
+      (256 KB)</span></a>
+    </td>
+
+    <td class="not-available">
+       <span class="big-height"><span class="hide-me"></span></span>
+    </td>
+
+
+   </tr>
+   <tr class="system-header">
+     <th>Darwin (Mac OS X)</th>
+
+    <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+    </td>
+
+    <td class="available">
+    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.3-Darwin-x86_64.bin">
+       <span class="big-height"><span class="hide-me"></span>
+       0.4.3<br>
+      (310 KB)</span></a>
+    </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span></span></span>
+     </td>
+
+   </tr>
+
+   <tr class="system-header">
+     <th>FreeBSD</th>
+
+      <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+      </td>
+
+      <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+      </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+
+   </tr>
+
+   <tr class="system-header">
+     <th>NetBSD</th>
+
+      <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+      </td>
+
+      <td class="in-progress">
+       <span class="big-height"><span class="hide-me"></span>0.4-pre</span>
+      </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+
+    </tr>
+
+   <tr class="system-header">
+     <th>Solaris</th>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+
+    </tr>
+
+
+   <tr class="system-header">
+     <th>Windows</th>
+
+    <td class="available">
+    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.0-win32.zip">
+       <span class="big-height"><span class="hide-me"></span>
+       0.4.0<br>
+      (236 KB)</span></a>
+    </td>
+
+
+    <td class="available">
+    <a href="https://github.com/downloads/icylisper/jark-client/jark-0.4.0-win32.zip">
+       <span class="big-height"><span class="hide-me"></span>
+       0.4.0<br>
+      (236 KB)</span></a>
+    </td>
+
+     <td class="not-available">
+       <span><span class="big-height"><span class="hide-me"></span> </span></span>
+     </td>
+     
+      </tr>
+     </table>
+
+     <br>
+     <a href="https://github.com/icylisper/jark-client/downloads">Older releases</a>
+     
+</div>
+
+<table class="key" 
+   ><tr
+    ><td></td
+     ><td
+     ><h1
+      >Key</h1
+      ></td
+     ></tr
+    ><tr class="key-blob" 
+    ><th class="available" 
+     ><span
+      ><span class="big-height" 
+       ><span class="hide-me" ></span
+        > </span
+       ></span
+      ></th
+     ><td
+     >Available and supported</td
+     ></tr
+    ><tr class="key-blob" 
+    ><th class="in-progress" 
+     ><span
+      ><span class="big-height" 
+       ><span class="hide-me" ></span
+        > </span
+       ></span
+      ></th
+     ><td
+     >Port in progress</td
+     ></tr
+    ><tr class="key-blob" 
+    ><th class="not-available" 
+     ><span
+      ><span class="big-height" 
+       ><span class="hide-me" ></span
+        > </span
+       ></span
+      ></th
+     ><td
+     >Not available (porters welcome!)</td
+     ></tr
+    ><tr class="key-blob" 
+    ><th class="not-applicable" 
+     ><span
+      ><span class="big-height" 
+       ><span class="hide-me" ></span
+        > </span
+       ></span
+      ></th
+     ><td
+     >No such system</td
+     ></tr
+    ></table
+   >

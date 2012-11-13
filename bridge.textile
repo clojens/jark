@@ -1,0 +1,12 @@
+---
+layout: clojure
+head: Jark
+---
+
+h2. Using jark as a clojure/JVM bridge
+
+h3. Rusk
+
+"https://github.com/icylisper/rusk":https://github.com/icylisper/rusk
+
+An Erlang-clojure bridge using the nREPL protocol. Still under development
