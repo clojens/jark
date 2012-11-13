@@ -1,5 +1,5 @@
 
-# jark-client
+# jark
 
 Jark is a tool to run clojure code on the JVM, interactively and remotely.
 It has 2 components - a client written in OCaml and a server written in Clojure/Java. The client is compiled to native code and is extremely tiny (~300KB). 
