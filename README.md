@@ -5,14 +5,13 @@ Jark is a tool to run clojure code on the JVM, interactively and remotely.
 It has 2 components - a client written in OCaml and a server written in Clojure/Java. The client is compiled to native code and is extremely tiny (~300KB). 
 The client uses the nREPL protocol to transfer clojure data structures over the wire. 
 
-Project page:  http://icylisper.in/jark
+Project page:  http://icylisper.github.com/jark
 
-Downloads: http://icylisper.in/jark/downloads.html
+Downloads: http://icylisper.github.com/jark/downloads.html
 
 ## Community
 
-User mailing list: https://groups.google.com/group/clojure-jark  
-Dev mailing list : https://groups.google.com/group/clojure-jark-dev
+Mailing list: https://groups.google.com/group/clojure-jark  
     
 Catch us on #jark on irc.freenode.net
 
