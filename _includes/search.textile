@@ -1,0 +1,8 @@
+<br> <br>
+<form accept-charset="utf-8" action="http://www.jrank.org/api/search/v2" method="get">
+ <a href="http://www.jrank.org/"></a>
+ <input id="key" name="key" type="hidden" value="f6134f60794170c9891e58702cbfff7443a84541" />
+ <input name="ie_utf8_fix" type="hidden" value="&#9760;" /> 
+ <input id="q" name="q" style="display: inline; vertical-align: middle;" type="text" value="" style="border: 3px solid #d7b9c9" />
+ <input name="commit" style="display: inline; vertical-align: middle;" type="submit" value="Search" /> 
+</form>
