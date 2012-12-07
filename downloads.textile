@@ -23,9 +23,9 @@ h2. Downloads
       </td>
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.3-Linux-x86_64.bin">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.4-Linux-x86_64.bin">
        <span class="big-height"><span class="hide-me"></span>
-       0.4.3<br>
+       0.4.4<br>
       (256 KB)</span></a>
     </td>
 
@@ -43,9 +43,9 @@ h2. Downloads
     </td>
 
     <td class="available">
-    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.3-Darwin-x86_64.bin">
+    <a href="https://github.com/downloads/icylisper/jark/jark-0.4.4-Darwin-x86_64.bin">
        <span class="big-height"><span class="hide-me"></span>
-       0.4.3<br>
+       0.4.4<br>
       (310 KB)</span></a>
     </td>
 
