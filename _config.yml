@@ -1,0 +1,10 @@
+pygments: true
+permalink: /posts/:title
+auto: true
+
+name: Isaac Praveen
+url: http://icylisper.in
+description: 'On Programming, Systems and Design: blogging by Isaac Praveen.'
+twitter: icylisper
+github: icylisper
+gravatar_url: http://www.gravatar.com/avatar/70e424d2699d86901d295684d38b84b6.png

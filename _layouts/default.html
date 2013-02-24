@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>
+    {% if page.title %}
+      {{ page.title }} &ndash;
+    {% endif %}
+    {{ site.name }}
+  </title>
+
+  <meta name="author" content="{{ site.name }}" />
+  <meta name="description" content="{{ site.description }}" />
+
+  <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
+
+  <!-- Jekyll theme made by Zach Holman over here https://github.com/holman/left -->
+
+  <link rel="stylesheet" href="/css/base.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
+  <link media="only screen and (max-device-width: 480px)" href="/css/iphone.css" type="text/css" rel="stylesheet" />
+  <link media="only screen and (device-width: 768px)" href="/css/iphone.css" type="text/css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+
+   <link href="http://feeds.feedburner.com/icylisper" rel="alternate"
+   title="Isaac Praveen" type="application/atom+xml"/>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18936522-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+  <!-- <section class="sidebar">  -->
+    <!-- <a href="/">  -->
+    <!--   <img src="{{ site.gravatar_url }}?s=75" height="75" width="75" class="avatar" />  -->
+    <!-- </a> -->
+
+    <!-- <section class="name"> -->
+    <!--   <a href="/"> -->
+    <!--     {% assign names = site.name | split: ' ' %}  -->
+    <!--     <span id="fname">ISAAC</span>  -->
+    <!--     <span id="lname">PRAVEEN</span>  -->
+    <!--   </a> -->
+    <!-- </section> -->
+
+    <center>
+    <br>
+    <section class="meta">
+      Ramblings on Hacks and Design<br><br>
+      <a href="/"><img src="/images/home.png"/></a> &nbsp;
+      <a href="https://github.com/{{ site.github }}" target="_blank"><img src="/images/github2.png" /></a> &nbsp;
+      <a href="https://twitter.com/{{ site.twitter }}" target="_blank"><img src="/images/twitter2.png"></a> &nbsp;
+      <a href="/atom.xml"><img src="/images/rss2.png" /></a> &nbsp;
+      <a href="http://www.linkedin.com/profile/view?id=19631803&trk=tab_pro" target="_blank"><img src="/images/linkedin.png" /></a> &nbsp;
+      <a href="/about.html"><img src="/images/info.png" /></a> &nbsp;
+    </section>
+
+    <section class="sections">
+      
+    </section>
+  {{ content }}
+</body>
+</html>
