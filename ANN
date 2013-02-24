@@ -1,8 +1,0 @@
-Pleased to announce jark 0.4.0.
-
-Features:
-
-1. The client is completely written in OCaml, compiled to native has an extremely small runtime
-2. jark runs on Mac OSX, GNU/Linux and Windows
-3. 
-
