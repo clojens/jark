@@ -4,76 +4,57 @@ layout: jark
 
 ## Getting Started
 
-{% highlight bash %}
-curl -L https://github.com/downloads/icylisper/jark-client/jark-0.4.3-`uname`-`uname -m`.bin > jark
-chmod +x jark
-{% endhighlight %}
-or find the appropriate client binary from [downloads page](/jark/download.html)
+Download the appropriate binary for your Architecture from [here](/jark/download.html)
    
-{% highlight clojure %}
-;Add [jark "0.4.3"] to project.clj 
-(ns your.namespace
-  (:require [clojure.tools.nrepl :as nrepl]))
-(nrepl/start-server 9000)
-{% endhighlight %}
+    ;Add [jark "0.4.3"] to project.clj 
+    (ns your.namespace
+      (:require [clojure.tools.nrepl :as nrepl]))
+    (nrepl/start-server 9000)
 
 And then use the jark client to connect it and execute a plugin or namespace. For example:
 
-{% highlight bash %}
-jark -h HOST -p PORT server stat
-{% endhighlight %}
+    jark -h HOST -p PORT server stat
 
 Alternatively, you can add the application-specific jars to classpath and start the server.
 
-{% highlight bash %}
-cd your-lein-project
-# Add [jark "0.4.3"] to project.clj 
-lein deps
-jark -cp lib/*:* server start
-{% endhighlight %}
+    cd your-lein-project
+    # Add [jark "0.4.3"] to project.clj 
+    lein deps
+    jark -cp lib/*:* server start
 
 We can start multiple servers on different ports
 
-{% highlight bash %}
-# project1
-jark -cp lib/*:* -p 9001 server start 
-# project2
-jark -cp lib/*:* -p 9002 server start 
-{% endhighlight %}
+
+    # project1
+    jark -cp lib/*:* -p 9001 server start 
+    # project2
+    jark -cp lib/*:* -p 9002 server start 
 
 Default HOST is localhost and default port is 9000
 
-{% highlight bash %}
-jark [-h HOST -p PORT] cp add <DIR or JAR>
-jark [-h HOST -p PORT] cp list
-jark [-h HOST -p PORT] vm stat
-jark [-h HOST -p PORT] vm threads
-jark [-h HOST -p PORT] ns find <PATTERN>
-jark [-h HOST -p PORT] ns load <CLJ-FILE>
-jark [-h HOST -p PORT] repl
-...
-{% endhighlight %}
+    jark [-h HOST -p PORT] cp add <DIR or JAR>
+    jark [-h HOST -p PORT] cp list
+    jark [-h HOST -p PORT] vm stat
+    jark [-h HOST -p PORT] vm threads
+    jark [-h HOST -p PORT] ns find <PATTERN>
+    jark [-h HOST -p PORT] ns load <CLJ-FILE>
+    jark [-h HOST -p PORT] repl
+    ...
 
 Any clojure function can be run from the command line. 
 
-{% highlight bash %}
-jark <NAMESPACE> <FUNCTION> <ARGS>
-{% endhighlight %}
+    jark <NAMESPACE> <FUNCTION> <ARGS>
 
 Start swank and connect via SLIME
 
-{% highlight bash %}
-jark swank start [4005]
-# M-x slime-connect REMOTE-IP PORT
-{% endhighlight %}
-
+    jark swank start [4005]
+    # M-x slime-connect REMOTE-IP PORT
 
 ## Command line options:
 
-{% highlight bash %}
-$ jark
-usage: jark OPTIONS server|repl|<plugin>|<namespace> [<command>|<function>] [<args>]
-OPTIONS:
+    $ jark
+    usage: jark OPTIONS server|repl|<plugin>|<namespace> [<command>|<function>] [<args>]
+    OPTIONS:
        -F  --force-install
        -S  --show-config
        -c  --clojure-version (1.3.0)
@@ -90,8 +71,102 @@ OPTIONS:
        -v  --version
        -w  --http-client (wget)
 
-To see available server plugins:
-       jark plugin list
-To see commands for a plugin:
-       jark <plugin>
+To see available server plugins: `jark plugin list`
+To see commands for a plugin: `jark <plugin>`
+
+## REPL
+
+Now, launch a repl and write some clojure!
+
+    jark [-h HOST -p PORT] repl
+    user>> (defn add [x y] (let [s (+ x y)] (println s) s)) 
+    => #'user/add
+    user>> (add 2 3)
+    5
+    => 5
+
+Notice that the REPL prints the returned value, prefixed by '=>'.
+
+### REPL Commands
+
+REPL command is a cool feature. Below is the complete list of REPL commands:
+
+    REPL Commands:
+    /clear
+    /cp [list add]
+    /debug [true false]
+    /inspect var
+    /ns namespace
+    /readline [true false]
+    /server [version info]
+    /vm [info stat]
+
+Switch on/off the nREPL debug-mode
+
+    user>> /debug on
+    debug is ON
+    user>> (+ 2 2)
+    put : (+ 2 2)
+    got : {'status': 'done', 'ns': 'user', 'id': 'localhost:9000-repl', 'value': '4\n'}
+    4
+    user>> /debug off
+
+### REPL keyboard shortucts
+
+*Line edit (emacs-style)*  
+
+|Kill-line|C-k|  
+|backward-char|C-b|  
+|backward-delete-char|C-h|  
+|backword-word|M-b|  
+|beginning-of-line|C-a|  
+|capitalize-word|M-c|  
+|clear|C-l|  
+|delete-char-or-end-of-file|C-d|  
+|downcase-word|M-l|  
+|end-of-line|C-e|  
+|forward-char|C-f|  
+|forward-word|M-f|  
+|interrupt|C-c|  
+|kill-word|M-d|  
+|transpose-chars|C-t|  
+|unix-line-discard|C-u|  
+|yank|C-y|  
+
+*History*  
+
+|beginning-of-history|M-<|  
+|end-of-history|M->|  
+|next-history|C-n|  
+|previous-history|C-p|  
+|reverse-search-history|C-r|  
+
+*Completions*
+
+|Complete-file-name|C-i|  
+
+Caveat: The jark REPL does not work on Windows, yet.
+
+## Scripting with jark
+
+**file: factorial**  
+
+{% highlight clojure %}
+#!/Usr/bin/env jark
+
+(ns factorial)
+
+(defn compute [n]
+   (apply * (take n (iterate inc 1))))
+
+(println "Factorial of 10 :" (compute 10))
 {% endhighlight %}
+
+And then run it as:
+    $ ./factorial
+    => Factorial of 10  : 3628800
+
+Jark also takes input from STDIN. One can pipe any expression to <code>jark</code>.
+
+     $ echo "(+ 2 2)" | jark -e
+     $ cat factorial | jark -e 
